@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="Days without a new Adam Sandler Movie dot com">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Days without a new Adam Sandler Movie dot com</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
+    <style media="screen">
+      html, body {
+        height: 100%;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      nav {
+        position: absolute;
+        right: 0;
+        text-align: right;
+        padding: 1.5rem;
+      }
+
+      a {
+        text-decoration: none;
+        color: #3498db; /* peter-river */
+      }
+
+      a:hover {
+        color: #2980b9; /* belize-hole */
+      }
+
+      a:not(:last-child) {
+        padding-right: .75rem;
+      }
+
+      section {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 15rem;
+        margin: 0;
+      }
+
+      h1 a {
+        color: #34495e; /* wet-asphalt */
+      }
+
+      h1 a:hover {
+        color: #2c3e50; /* midnight-blue */
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="http://www.imdb.com/name/nm0001191/#actor">IMDB</a>
+      <a href="https://github.com/thewarpaint/dayswithoutanewadamsandlermovie.com">GitHub</a>
+    </nav>
+
+    <section>
+      <h1><a id="days" href="http://www.imdb.com/title/tt2479478/"></a></h1>
+    </section>
+
+    <script type="text/javascript">
+      var now = new Date(),
+        lastDate = new Date(2015, 11, 11), // The Ridiculous 6, 2015-12-11
+        diff = Math.floor((now.getTime() - lastDate.getTime()) / (24 * 60 * 60 * 1000));
+
+      document.getElementById('days').textContent = diff;
+    </script>
+  </body>
+</html>
