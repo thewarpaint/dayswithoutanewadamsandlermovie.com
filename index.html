@@ -117,17 +117,24 @@
         }
 
         #ratings li {
+          float: none;
+          display: inline-block;
+          vertical-align: top;
           margin-bottom: .5rem;
+          margin-left: .5rem;
+          margin-right: .5rem !important;
+          width: 20%;
+        }
+
+        .movie-info {
+          flex: 1 0 auto;
+          text-align: center;
         }
       }
 
       @media (max-width: 480px) {
         h1 {
           font-size: 10rem;
-        }
-
-        .movie-info {
-          text-align: center;
         }
       }
     </style>
