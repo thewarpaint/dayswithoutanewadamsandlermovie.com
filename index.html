@@ -8,6 +8,7 @@
     <title>Days without a new Adam Sandler Movie dot com</title>
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <style media="screen">
       html, body {
         height: 100%;
@@ -20,8 +21,26 @@
       }
 
       nav {
-        text-align: right;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         padding: 1.5rem;
+      }
+
+      nav .fa {
+        font-size: 1.5rem;
+      }
+
+      nav .fa.fa-facebook-official {
+        color: #3b5998;
+      }
+
+      nav .fa.fa-twitter {
+        color: #4099ff;
+      }
+
+      nav .fa.fa-github {
+        color: #333333;
       }
 
       a {
@@ -34,7 +53,7 @@
       }
 
       nav a:not(:last-child) {
-        padding-right: .75rem;
+        padding-right: 1rem;
       }
 
       section {
@@ -143,7 +162,12 @@
     <nav>
       <a href="http://goo.gl/vbENlb">IsAdamSandlerDead.com</a>
       <a href="http://www.imdb.com/name/nm0001191/#actor">IMDb</a>
-      <a href="https://github.com/thewarpaint/dayswithoutanewadamsandlermovie.com">About</a>
+      <a href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=http%3A%2F%2Fdayswithoutanewadamsandlermovie.com%2F">
+        <i class="fa fa-facebook-official"></i></a>
+      <a href="https://twitter.com/intent/tweet?text=Days%20without%20a%20new%20Adam%20Sandler%20movie%3A&url=http%3A%2F%2Fdayswithoutanewadamsandlermovie.com%2F&in-reply-to=687052797343223808">
+        <i class="fa fa-twitter"></i></a>
+      <a href="https://github.com/thewarpaint/dayswithoutanewadamsandlermovie.com">
+        <i class="fa fa-github"></i></a>
     </nav>
 
     <section>
