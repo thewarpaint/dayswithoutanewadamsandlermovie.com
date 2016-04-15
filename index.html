@@ -84,11 +84,11 @@
         margin-left: 1.5rem;
       }
 
-      h2, p {
+      h2, .movie-info p {
         margin: 0 0 1rem;
       }
 
-      p {
+      .movie-info p {
         color: #95a5a6; /* concrete */
       }
 
@@ -130,6 +130,53 @@
         color: #c0392b; /* pomegranate */
       }
 
+      /**
+       * About
+       */
+
+      body.about-mode nav, body.about-mode #days-container, body.about-mode aside {
+        filter: blur(.33rem);
+        -webkit-filter: blur(.33rem);
+        -moz-filter: blur(.33rem);
+        -o-filter: blur(.33rem);
+        -ms-filter: blur(.33rem);
+      }
+
+      body.about-mode #about {
+        display: flex;
+      }
+
+      #about {
+        display: none;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background-color: rgba(255, 255, 255, 0.85);
+        cursor: pointer;
+      }
+
+      #about button {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        border: 0;
+        padding: 0;
+        background: none;
+        font-size: 2rem;
+        line-height: 2rem;
+        color: #95a5a6; /* concrete */
+        cursor: pointer;
+      }
+
+      #about p {
+        padding: 2rem;
+        width: 66%;
+        text-align: center;
+        font-size: 2rem;
+      }
+
       @media (max-width: 768px) {
         html {
           font-size: 12px;
@@ -162,6 +209,7 @@
     <nav>
       <a href="http://goo.gl/vbENlb">IsAdamSandlerDead.com</a>
       <a href="http://www.imdb.com/name/nm0001191/#actor">IMDb</a>
+      <a href="#" id="about-link">About</a>
       <a href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=http%3A%2F%2Fdayswithoutanewadamsandlermovie.com%2F">
         <i class="fa fa-facebook-official"></i></a>
       <a href="https://twitter.com/intent/tweet?text=Days%20without%20a%20new%20Adam%20Sandler%20movie%3A&url=http%3A%2F%2Fdayswithoutanewadamsandlermovie.com%2F&in-reply-to=687052797343223808">
@@ -170,7 +218,7 @@
         <i class="fa fa-github"></i></a>
     </nav>
 
-    <section>
+    <section id="days-container">
       <h1 id="days"></h1>
     </section>
 
@@ -194,12 +242,27 @@
       </div>
     </aside>
 
+    <section id="about">
+      <button type="button"><i class="fa fa-close"></i></button>
+      <p>We all wish the counter would just keep going, but sadly, time and time again it breaks our hearts and
+      goes back to zero.</p>
+    </section>
+
     <script type="text/javascript">
       var now = new Date(),
         lastDate = new Date(2015, 11, 11), // The Ridiculous 6, 2015-12-11
         diff = Math.floor((now.getTime() - lastDate.getTime()) / (24 * 60 * 60 * 1000));
 
       document.getElementById('days').textContent = diff;
+
+      // About
+      document.getElementById('about-link').addEventListener('click', function () {
+        document.body.classList.add('about-mode');
+      });
+
+      document.getElementById('about').addEventListener('click', function () {
+        document.body.classList.remove('about-mode');
+      });
 
       // Google Analytics tracking code
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
