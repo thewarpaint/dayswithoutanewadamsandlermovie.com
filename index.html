@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
     <style media="screen">
       html, body {
         height: 100%;
@@ -59,13 +60,23 @@
       section {
         flex: 1 0 auto;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
       }
 
-      h1 {
-        font-size: 15rem;
+      #days, #time {
+        font-family: "Inconsolata";
         margin: 0;
+      }
+
+      #days {
+        font-size: 15rem;
+      }
+
+      #time {
+        margin-top: -1rem;
+        font-size: 2rem;
       }
 
       aside {
@@ -220,6 +231,7 @@
 
     <section id="days-container">
       <h1 id="days"></h1>
+      <p id="time"></p>
     </section>
 
     <aside>
@@ -249,11 +261,46 @@
     </section>
 
     <script type="text/javascript">
-      var now = new Date(),
-        lastDate = new Date(2015, 11, 11), // The Ridiculous 6, 2015-12-11
-        diff = Math.floor((now.getTime() - lastDate.getTime()) / (24 * 60 * 60 * 1000));
+      function clockPad(number) {
+        return number > 9 ? number : '0' + number;
+      }
 
-      document.getElementById('days').textContent = diff;
+      function getDiffFromNow(lastDate) {
+        var second = 1000,
+          minute = second * 60,
+          hour = minute * 60,
+          day = hour * 24,
+          now = new Date(),
+          diff = now.getTime() - lastDate.getTime(),
+          result = {};
+
+        result.days = Math.floor(diff / day);
+        diff = diff % day;
+
+        result.hours = Math.floor(diff / hour);
+        diff = diff % hour;
+
+        result.minutes = Math.floor(diff / minute);
+        diff = diff % minute;
+
+        result.seconds = Math.floor(diff / second);
+
+        return result;
+      }
+
+      function updateTimer() {
+        var diff = getDiffFromNow(lastDate);
+
+        daysElement.textContent = diff.days;
+        timeElement.textContent =
+          clockPad(diff.hours) + ':' + clockPad(diff.minutes) + ':' + clockPad(diff.seconds);
+      }
+
+      var daysElement = document.getElementById('days'),
+        timeElement = document.getElementById('time'),
+        lastDate = new Date(2015, 11, 11); // The Ridiculous 6, 2015-12-11;
+
+      setInterval(updateTimer, 30);
 
       // About
       document.getElementById('about-link').addEventListener('click', function () {
