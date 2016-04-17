@@ -218,7 +218,7 @@
   </head>
   <body>
     <nav>
-      <a href="http://goo.gl/vbENlb">IsAdamSandlerDead.com</a>
+      <a href="http://goo.gl/vbENlb" id="is-he-dead-link">IsAdamSandlerDead.com</a>
       <a href="http://www.imdb.com/name/nm0001191/#actor">IMDb</a>
       <a href="#" id="about-link">About</a>
       <a href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=http%3A%2F%2Fdayswithoutanewadamsandlermovie.com%2F">
@@ -298,9 +298,19 @@
 
       var daysElement = document.getElementById('days'),
         timeElement = document.getElementById('time'),
-        lastDate = new Date(2015, 11, 11); // The Ridiculous 6, 2015-12-11;
+        lastDate = new Date(2015, 11, 11), // The Ridiculous 6, 2015-12-11
+        isHeDeadUrls = [
+          'https://i.imgur.com/UrhxBaw.gif',
+          'https://i.imgur.com/EplQaw8.gifv',
+          'http://goo.gl/vbENlb'
+        ];
 
+      // Update counter and timer
       setInterval(updateTimer, 30);
+
+      // Random IsAdamSandlerDead.com URL
+      document.getElementById('is-he-dead-link').href =
+        isHeDeadUrls[Math.floor(Math.random() * isHeDeadUrls.length)];
 
       // About
       document.getElementById('about-link').addEventListener('click', function () {
