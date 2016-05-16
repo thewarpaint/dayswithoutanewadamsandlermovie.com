@@ -478,6 +478,11 @@
           }
         ];
 
+      // Enable Future mode from the URL
+      if(/future/.test(window.location.href)) {
+        currentIndex = movies.length - 1;
+      }
+
       updateMovie(movies[currentIndex]);
 
       // Update counter and timer
