@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
     <style media="screen">
+      /**
+       * Global styles and resets
+       */
+
       html, body {
         height: 100%;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -21,6 +25,25 @@
         display: flex;
         flex-flow: column nowrap;
       }
+
+      a {
+        text-decoration: none;
+        color: #3498db; /* peter-river */
+      }
+
+      a:hover {
+        color: #2980b9; /* belize-hole */
+      }
+
+      button {
+        border: 0;
+        padding: 0;
+        background: none;
+      }
+
+      /**
+       * Nav
+       */
 
       nav {
         display: flex;
@@ -43,15 +66,6 @@
 
       nav .fa.fa-github {
         color: #333333;
-      }
-
-      a {
-        text-decoration: none;
-        color: #3498db; /* peter-river */
-      }
-
-      a:hover {
-        color: #2980b9; /* belize-hole */
       }
 
       nav a:not(:last-child) {
@@ -89,7 +103,12 @@
       }
 
       #thumbnail {
+        flex: 0 0 auto;
+        width: 5rem;
+        height: 7.4rem;
         border: 1px solid #e74c3c; /* alizarin */
+        background-position: center center;
+        background-size: cover;
       }
 
       .movie-info {
@@ -102,6 +121,10 @@
 
       .movie-info p {
         color: #95a5a6; /* concrete */
+      }
+
+      .movie-release-future {
+        display: none;
       }
 
       #ratings {
@@ -142,6 +165,19 @@
         color: #c0392b; /* pomegranate */
       }
 
+      aside button {
+        font-size: 1.5rem;
+        padding: 0 1.25rem;
+      }
+
+      aside button:disabled {
+        opacity: 0.5;
+      }
+
+      aside button:not(:disabled) {
+        cursor: pointer;
+      }
+
       /**
        * About
        */
@@ -173,9 +209,6 @@
         position: absolute;
         top: 2rem;
         right: 2rem;
-        border: 0;
-        padding: 0;
-        background: none;
         font-size: 2rem;
         line-height: 2rem;
         color: #95a5a6; /* concrete */
@@ -188,6 +221,48 @@
         text-align: center;
         font-size: 2rem;
       }
+
+      /**
+       * Future mode theme
+       */
+
+      .future-mode {
+        background-color: #e74c3c; /* alizarin */
+      }
+
+      .future-mode nav .fa.fa-facebook-official, .future-mode nav .fa.fa-twitter,
+          .future-mode nav .fa.fa-github, .future-mode a, .future-mode #days-container, .future-mode h2,
+          .future-mode #ratings li a span {
+        color: #ffffff;
+      }
+
+      .future-mode a:hover {
+        color: #ecf0f1; /* clouds */
+      }
+
+      .future-mode #thumbnail {
+        border-color: #ffffff;
+      }
+
+      .future-mode .movie-info p, .future-mode #ratings li a {
+        color: #c0392b; /* pomegranate */
+      }
+
+      .future-mode aside button {
+        color: #ffffff;
+      }
+
+      .future-mode .movie-release-past {
+        display: none;
+      }
+
+      .future-mode .movie-release-future {
+        display: inline;
+      }
+
+      /**
+       * Responsive behaviour
+       */
 
       @media (max-width: 768px) {
         html {
@@ -205,7 +280,7 @@
         }
 
         .movie-info {
-          flex: 1 0 auto;
+          flex: 1 1 auto;
           text-align: center;
         }
       }
@@ -236,23 +311,18 @@
     </section>
 
     <aside>
-      <img id="thumbnail" src="https://upload.wikimedia.org/wikipedia/en/0/0d/The_Ridiculous_6_poster.jpg"
-        alt="'The Ridiculous 6' poster" style="width: 5rem; height: 7.4rem;">
+      <button type="button" id="previous-btn"><i class="fa fa-chevron-left"></i></button>
+      <div id="thumbnail"></div>
       <div class="movie-info">
-        <h2>The Ridiculous 6</h2>
+        <h2 id="movie-title"></h2>
         <p>
-          Released on December 11, 2015
+          <span class="movie-release-past">Released on</span>
+          <span class="movie-release-future">To be released on</span>
+          <span id="movie-release-date"></span>
         </p>
-        <ul id="ratings">
-          <li><a href="http://www.imdb.com/title/tt2479478/"><span>4.9/10</span>IMDb</a></li>
-          <li><a href="http://www.rottentomatoes.com/m/the_ridiculous_6/#contentReviews">
-            <span>0%</span>Rotten Tomatoes</a></li>
-          <li><a href="http://www.metacritic.com/movie/the-ridiculous-6">
-            <span>18%</span>Metacritic</a></li>
-          <li><a href="http://www.cinemablend.com/reviews/Ridiculous-6-68647.html">
-            <span>1.5/5</span>CinemaBlend</a></li>
-        </ul>
+        <ul id="ratings"></ul>
       </div>
+      <button type="button" id="next-btn"><i class="fa fa-chevron-right"></i></button>
     </aside>
 
     <section id="about">
@@ -266,13 +336,13 @@
         return number > 9 ? number : '0' + number;
       }
 
-      function getDiffFromNow(lastDate) {
+      function getDiffFromNow(releaseDate) {
         var second = 1000,
           minute = second * 60,
           hour = minute * 60,
           day = hour * 24,
           now = new Date(),
-          diff = now.getTime() - lastDate.getTime(),
+          diff = Math.abs(now.getTime() - releaseDate.getTime()),
           result = {};
 
         result.days = Math.floor(diff / day);
@@ -290,21 +360,125 @@
       }
 
       function updateTimer() {
-        var diff = getDiffFromNow(lastDate);
+        var diff = getDiffFromNow(currentReleaseDate);
 
         daysElement.textContent = diff.days;
         timeElement.textContent =
           clockPad(diff.hours) + ':' + clockPad(diff.minutes) + ':' + clockPad(diff.seconds);
       }
 
+      function getDateObjectFromString(dateString) {
+        var dateParts = dateString.split('-');
+
+        return new Date(parseInt(dateParts[0], 10), parseInt(dateParts[1], 10) - 1,
+          parseInt(dateParts[2], 10));
+      }
+
+      function updateMovie(movie) {
+        renderMovie(movie);
+        updateMovieNav();
+        currentReleaseDate = getDateObjectFromString(movie.releaseDate);
+        updateStatus(currentReleaseDate);
+      }
+
+      function renderMovie(movie) {
+        var ratingsFragment = document.createDocumentFragment();
+
+        titleElement.textContent = movie.title;
+        releaseDateElement.textContent = movie.releaseDateReadable;
+        thumbnailElement.style.backgroundImage = 'url("' + movie.thumbnailUrl + '")';
+        ratingsElement.innerHTML = '';
+
+        getRatingsDOMElements(movie.ratings).forEach(function (element) {
+          ratingsFragment.appendChild(element);
+        });
+
+        ratingsElement.appendChild(ratingsFragment);
+      }
+
+      function updateMovieNav() {
+        previousBtnElement.disabled = currentIndex === 0;
+        nextBtnElement.disabled = currentIndex === movies.length - 1;
+      }
+
+      function updateStatus(releaseDate) {
+        if(releaseDate.getTime() > (new Date()).getTime()) {
+          document.body.classList.add('future-mode');
+        } else {
+          document.body.classList.remove('future-mode');
+        }
+      }
+
+      function getRatingsDOMElements(ratings) {
+        return ratings.map(function (rating) {
+          var a = document.createElement('a'),
+              li = document.createElement('li'),
+              span = document.createElement('span');
+
+          a.href = rating.link;
+          span.textContent = rating.value;
+          a.appendChild(span);
+          a.appendChild(document.createTextNode(rating.name));
+          li.appendChild(a);
+
+          return li;
+        });
+      }
+
       var daysElement = document.getElementById('days'),
+        nextBtnElement = document.getElementById('next-btn'),
+        previousBtnElement = document.getElementById('previous-btn'),
+        ratingsElement = document.getElementById('ratings'),
+        releaseDateElement = document.getElementById('movie-release-date'),
+        thumbnailElement = document.getElementById('thumbnail'),
         timeElement = document.getElementById('time'),
-        lastDate = new Date(2015, 11, 11), // The Ridiculous 6, 2015-12-11
+        titleElement = document.getElementById('movie-title'),
+        currentIndex = 0,
+        currentReleaseDate,
         isHeDeadUrls = [
           'https://i.imgur.com/UrhxBaw.gif',
           'https://i.imgur.com/EplQaw8.gifv',
           'http://goo.gl/vbENlb'
+        ]
+        movies = [
+          {
+            title: 'The Ridiculous 6',
+            releaseDate: '2015-12-11',
+            releaseDateReadable: 'December 11, 2015',
+            thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/en/0/0d/The_Ridiculous_6_poster.jpg',
+            ratings: [
+              {
+                name: 'IMDb',
+                value: '4.9/10',
+                link: 'http://www.imdb.com/title/tt2479478/'
+              },
+              {
+                name: 'Rotten Tomatoes',
+                value: '0%',
+                link: 'http://www.rottentomatoes.com/m/the_ridiculous_6/#contentReviews'
+              },
+              {
+                name: 'Metacritic',
+                value: '18%',
+                link: 'http://www.metacritic.com/movie/the-ridiculous-6'
+              },
+              {
+                name: 'CinemaBlend',
+                value: '1.5/5',
+                link: 'http://www.cinemablend.com/reviews/Ridiculous-6-68647.html'
+              }
+            ]
+          },
+          {
+            title: 'The Do Over',
+            releaseDate: '2016-05-27',
+            releaseDateReadable: 'May 27, 2016',
+            thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/en/1/12/The_Do-Over_Poster.png',
+            ratings: []
+          }
         ];
+
+      updateMovie(movies[currentIndex]);
 
       // Update counter and timer
       setInterval(updateTimer, 250);
@@ -321,6 +495,17 @@
       document.getElementById('about').addEventListener('click', function () {
         document.body.classList.remove('about-mode');
       });
+
+      // Navigation
+      previousBtnElement.addEventListener('click', function () {
+        updateMovie(movies[--currentIndex]);
+      });
+
+      nextBtnElement.addEventListener('click', function () {
+        updateMovie(movies[++currentIndex]);
+      });
+
+      updateMovieNav();
 
       // Google Analytics tracking code
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
